@@ -13,3 +13,5 @@ This work is based on "Honda Vezel e:HEV RS (HR-V)" (https://sketchfab.com/3d-mo
 Modifications: Geometry simplified and Meshopt-compressed for web display. Model year not verified.
 
 Display modification: Secondary roof paint recolored to match the white body in the web viewer.
+
+Display geometry modification: Original upper RS grille insert replaced by a custom eight-bar horizontal grille, fitted to its measured opening; front RS badge hidden. Honda emblem retained.

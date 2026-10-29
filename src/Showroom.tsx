@@ -5,7 +5,7 @@ import { Box3, Vector3, Mesh, MeshPhysicalMaterial, MeshStandardMaterial } from 
 import { RotateCw, Hand, Expand } from 'lucide-react';
 import Car from './Car';
 import { greeting, modelUrl } from './config';
-import { paintGrille } from './grille';
+import { replaceGrille } from './grille';
 
 class SceneBoundary extends Component<{ children: ReactNode; fallback: ReactNode }, { failed: boolean }> {
   state = { failed: false };
@@ -36,19 +36,13 @@ function LoadedCar({ onLoaded }: { onLoaded: () => void }) {
         object.visible = false;
         return;
       }
-      if (object.name === 'GN_PARTS_v02_VEZEL_RS_Parts_shell_40_Lightset_01_black_gloss_0') {
-        paintGrille(object, pearlPaint);
-        return;
-      }
       const recolor = (material: MeshStandardMaterial) => {
-        // Upper grille only: keep the badge, dark recesses and lower intake intact.
-        const upperGrille = object.name === 'Object001_chrome_0'
-          || object.name === 'GN_PARTS_v02_VEZEL_RS_Parts_shell_17_black_0';
-        return upperGrille || material.name === 'carpaint' || material.name === 'carpaint_second'
+        return material.name === 'carpaint' || material.name === 'carpaint_second'
           ? pearlPaint : material;
       };
       object.material = Array.isArray(object.material) ? object.material.map(recolor) : recolor(object.material);
     });
+    replaceGrille(copy, pearlPaint);
     return copy;
   }, [originalScene]);
   useEffect(onLoaded, []);
