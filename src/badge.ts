@@ -1,4 +1,4 @@
-import { Box3, ExtrudeGeometry, Mesh, Shape, Vector3, type Group, type Material, type Matrix4, type Object3D } from 'three';
+import { Box3, ExtrudeGeometry, Float32BufferAttribute, Mesh, Shape, Vector3, type Group, type Material, type Matrix4, type Object3D } from 'three';
 
 /** Seat the original emblem on a shallow backing following its rounded outline. */
 export function fitFrontBadge(root: Object3D, grille: Group, grilleFront: number, inverseRoot: Matrix4, black: Material, slot: { centerY: number; height: number }) {
@@ -19,6 +19,20 @@ export function fitFrontBadge(root: Object3D, grille: Group, grilleFront: number
   const depthScale = emblemDepth / (bounds.max.z - bounds.min.z);
   for (const badge of badges) {
     const geometry = badge.geometry.clone();
+    // Meshopt stores normalized Int16 positions. Transforming them in place
+    // rounds/wraps world coordinates and can leave the emblem centimetres away.
+    // Decode only these two small meshes to floats before doing any transforms.
+    for (const name of ['position', 'normal']) {
+      const attribute = geometry.getAttribute(name);
+      if (!attribute) continue;
+      const values = new Float32Array(attribute.count * 3);
+      for (let i = 0; i < attribute.count; i++) {
+        values[i * 3] = attribute.getX(i);
+        values[i * 3 + 1] = attribute.getY(i);
+        values[i * 3 + 2] = attribute.getZ(i);
+      }
+      geometry.setAttribute(name, new Float32BufferAttribute(values, 3));
+    }
     geometry.applyMatrix4(badge.matrixWorld);
     geometry.translate(-center.x, -center.y, -bounds.max.z);
     geometry.scale(scale, scale, depthScale);
