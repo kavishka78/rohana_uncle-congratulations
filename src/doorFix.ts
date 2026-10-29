@@ -25,3 +25,27 @@ export function repairDoorBlockers(root: Object3D) {
   geometry.computeBoundingSphere();
   blocker.geometry = geometry;
 }
+
+/** Keep the right rear door's painted lip behind its black upper-window trim. */
+export function repairRightRearTrim(root: Object3D) {
+  root.updateMatrixWorld(true);
+  const door = root.getObjectByName('shell_126_BFRed_Mrg_Mirroring_carpaint_0');
+  if (!(door instanceof Mesh)) return;
+  const geometry = door.geometry.clone();
+  const position = geometry.getAttribute('position');
+  const inverse = door.matrixWorld.clone().invert();
+  const point = new Vector3();
+  for (let i = 0; i < position.count; i++) {
+    point.fromBufferAttribute(position, i).applyMatrix4(door.matrixWorld);
+    if (point.x < -.62 && point.x > -.70 && point.y > 1.16 && point.y < 1.22
+      && point.z > -.8 && point.z < -.45) {
+      point.x += .002;
+      point.applyMatrix4(inverse);
+      position.setXYZ(i, point.x, point.y, point.z);
+    }
+  }
+  position.needsUpdate = true;
+  geometry.computeBoundingBox();
+  geometry.computeBoundingSphere();
+  door.geometry = geometry;
+}

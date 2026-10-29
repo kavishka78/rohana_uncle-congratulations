@@ -6,7 +6,8 @@ import { RotateCw, Hand, Expand } from 'lucide-react';
 import Car from './Car';
 import { greeting, modelUrl } from './config';
 import { replaceGrille } from './grille';
-import { repairDoorBlockers } from './doorFix';
+import { repairDoorBlockers, repairRightRearTrim } from './doorFix';
+import { addPersonalPlates } from './plates';
 
 class SceneBoundary extends Component<{ children: ReactNode; fallback: ReactNode }, { failed: boolean }> {
   state = { failed: false };
@@ -33,7 +34,9 @@ function LoadedCar({ onLoaded }: { onLoaded: () => void }) {
       // Only the small front RS emblem and its backing, not the Honda emblem.
       if (['GN_PARTS_v02_VEZEL_RS_Parts_shell_28_Lightset_01_chrome_0',
         'GN_PARTS_v02_VEZEL_RS_Parts_shell_36_Lightset_01_red_0',
-        'GN_PARTS_v02_VEZEL_RS_Parts_shell_78_Lightset_01_black_gloss_0'].includes(object.name)) {
+        'GN_PARTS_v02_VEZEL_RS_Parts_shell_78_Lightset_01_black_gloss_0',
+        'GN_PARTS_v02_VEZEL_RS_Parts_shell_4_Lightset_01_chrome_0',
+        'pasted__GN_v01_RS_Parts_shell_2_Lightset_01_red_0'].includes(object.name)) {
         object.visible = false;
         return;
       }
@@ -45,6 +48,8 @@ function LoadedCar({ onLoaded }: { onLoaded: () => void }) {
     });
     replaceGrille(copy, pearlPaint);
     repairDoorBlockers(copy);
+    repairRightRearTrim(copy);
+    addPersonalPlates(copy);
     return copy;
   }, [originalScene]);
   useEffect(onLoaded, []);

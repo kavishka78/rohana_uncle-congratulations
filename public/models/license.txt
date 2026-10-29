@@ -21,3 +21,5 @@ Front-door repair: Restored the two original front-door skin meshes to remove si
 Front emblem mounting: Repositioned the original Honda emblem closer to the custom grille and added a shallow rounded backing matching its outline.
 
 Emblem fit refinement: Thin, near-flush emblem fitted between continuous upper/lower slats; rounded backing confined to its outline.
+
+Further display changes: Recessed a protruding lip on the right rear door, hid the rear RS emblem, reduced silver front-emblem depth, and replaced the rear plate and added a front plate with original ROHANA lettering.

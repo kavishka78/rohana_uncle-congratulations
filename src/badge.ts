@@ -41,8 +41,8 @@ export function fitFrontBadge(root: Object3D, grille: Group, grilleFront: number
       const originalNormals = geometry.getAttribute('normal')?.clone();
       geometry.applyMatrix4(silver.matrixWorld);
       geometry.translate(0, 0, -silverBounds.min.z);
-      geometry.scale(1, 1, .00028 / depth);
-      geometry.translate(0, 0, blueBounds.max.z + .00012);
+      geometry.scale(1, 1, .00008 / depth);
+      geometry.translate(0, 0, blueBounds.max.z + .00004);
       geometry.applyMatrix4(silver.matrixWorld.clone().invert());
       // Keep the existing front-facing silver highlights while changing depth only.
       if (originalNormals) geometry.setAttribute('normal', originalNormals);
