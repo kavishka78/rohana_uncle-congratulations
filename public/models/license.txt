@@ -11,3 +11,5 @@ If you use this 3D model in your project be sure to copy paste this credit where
 This work is based on "Honda Vezel e:HEV RS (HR-V)" (https://sketchfab.com/3d-models/honda-vezel-ehev-rs-hr-v-bf835b5a5e6f4b79a134db5156992cf0) by Asadawut.Kaewma (https://sketchfab.com/Asadawut.Kaewma) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 
 Modifications: Geometry simplified and Meshopt-compressed for web display. Model year not verified.
+
+Display modification: Secondary roof paint recolored to match the white body in the web viewer.
