@@ -1,7 +1,7 @@
 import { Component, Suspense, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Center, ContactShadows, OrbitControls, useGLTF } from '@react-three/drei';
-import { Box3, Vector3, Mesh, MeshStandardMaterial } from 'three';
+import { Box3, Vector3, Mesh, MeshPhysicalMaterial, MeshStandardMaterial } from 'three';
 import { RotateCw, Hand, Expand } from 'lucide-react';
 import Car from './Car';
 import { greeting, modelUrl } from './config';
@@ -15,22 +15,24 @@ function LoadedCar({ onLoaded }: { onLoaded: () => void }) {
   const { scene: originalScene } = useGLTF(modelUrl!, false, true);
   const scene = useMemo(() => {
     const copy = originalScene.clone(true);
-    let bodyPaint: MeshStandardMaterial | undefined;
-    copy.traverse(object => {
-      if (!(object instanceof Mesh)) return;
-      const materials = Array.isArray(object.material) ? object.material : [object.material];
-      bodyPaint ??= materials.find(material => material.name === 'carpaint') as MeshStandardMaterial | undefined;
+    const pearlPaint = new MeshPhysicalMaterial({
+      name: 'Sunlight white pearl preview',
+      color: greeting.carPaint,
+      metalness: .12,
+      roughness: .28,
+      clearcoat: .85,
+      clearcoatRoughness: .18,
+      iridescence: .08,
+      iridescenceIOR: 1.3,
     });
     copy.traverse(object => {
       if (!(object instanceof Mesh)) return;
       const recolor = (material: MeshStandardMaterial) => {
-        // Front grille slats only; keep the emblem, grille backing and lower intake intact.
-        if (object.name === 'Object001_chrome_0' && bodyPaint) return bodyPaint.clone();
-        if (material.name !== 'carpaint_second') return material;
-        const whiteRoof = material.clone();
-        if (bodyPaint) whiteRoof.color.copy(bodyPaint.color);
-        else whiteRoof.color.set('#d7d7d7');
-        return whiteRoof;
+        // Upper grille only: keep the badge, dark recesses and lower intake intact.
+        const upperGrille = object.name === 'Object001_chrome_0'
+          || object.name === 'GN_PARTS_v02_VEZEL_RS_Parts_shell_40_Lightset_01_black_gloss_0';
+        return upperGrille || material.name === 'carpaint' || material.name === 'carpaint_second'
+          ? pearlPaint : material;
       };
       object.material = Array.isArray(object.material) ? object.material.map(recolor) : recolor(object.material);
     });

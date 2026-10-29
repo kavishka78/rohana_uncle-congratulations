@@ -10,6 +10,8 @@ export const greeting = {
   ],
   sender: 'Kaviya',
   signature: 'With love, Kaviya',
+  // Screen approximation inspired by Premium Sunlight White Pearl (NH-902P).
+  carPaint: '#f4f4ef',
   // Change this if the front of your GLB faces another direction (radians).
   modelRotation: 0,
 };
