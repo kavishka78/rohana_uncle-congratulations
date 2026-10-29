@@ -1,4 +1,5 @@
 import { Box3, BufferGeometry, Float32BufferAttribute, Group, Mesh, MeshStandardMaterial, Vector3, type Material, type Object3D } from 'three';
+import { fitFrontBadge } from './badge';
 
 const SOURCE_INSERTS = ['Object001_chrome_0', 'GN_PARTS_v02_VEZEL_RS_Parts_shell_17_black_0', 'GN_PARTS_v02_VEZEL_RS_Parts_shell_40_Lightset_01_black_gloss_0'];
 // Normalized silhouette measured from the source insert, bottom to top.
@@ -26,6 +27,9 @@ export function replaceGrille(root: Object3D, paint: Material) {
   const grille = new Group();
   grille.name = 'Custom_horizontal_body_color_grille';
   const inverseRoot = root.matrixWorld.clone().invert();
+  const badge = root.getObjectByName('LOGO_FRONT_H_RS_chrome_0');
+  const badgeCenter = badge ? new Box3().setFromObject(badge, true).getCenter(new Vector3()) : new Vector3(centerX, .519, 0);
+  const badgeOpening = fitFrontBadge(root, grille, surfaceZ(badgeCenter.x, badgeCenter.y), inverseRoot, black);
   function addSurface(name: string, vertices: number[], indices: number[], material: Material) {
     const geometry = new BufferGeometry();
     geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
@@ -75,10 +79,10 @@ export function replaceGrille(root: Object3D, paint: Material) {
   for (let i = 0; i < 8; i++) {
     const t = .085 + i * .112, y = bottom + height * t;
     const extent = halfWidth * widthAt(t) - .008, thickness = height * .052;
-    // Leave the original chrome/blue emblem entirely clear.
-    if (y + thickness / 2 > .458 && y - thickness / 2 < .579) {
-      bar(`White_horizontal_bar_${i + 1}_left`, y, centerX - extent, centerX - .073, paint, thickness);
-      bar(`White_horizontal_bar_${i + 1}_right`, y, centerX + .073, centerX + extent, paint, thickness);
+    const opening = badgeOpening?.(y, thickness);
+    if (opening) {
+      bar(`White_horizontal_bar_${i + 1}_left`, y, centerX - extent, opening.left, paint, thickness);
+      bar(`White_horizontal_bar_${i + 1}_right`, y, opening.right, centerX + extent, paint, thickness);
     } else bar(`White_horizontal_bar_${i + 1}`, y, centerX - extent, centerX + extent, paint, thickness);
   }
   const browY = bottom + height * .965, browExtent = halfWidth * widthAt(.965);
