@@ -15,3 +15,5 @@ Modifications: Geometry simplified and Meshopt-compressed for web display. Model
 Display modification: Secondary roof paint recolored to match the white body in the web viewer.
 
 Display geometry modification: Original upper RS grille insert replaced by a custom eight-bar horizontal grille, fitted to its measured opening; front RS badge hidden. Honda emblem retained.
+
+Front-door repair: Restored the two original front-door skin meshes to remove simplification artifacts. Recessed the two intersecting door-seam blocker strips in the viewer; original handles and keyhole retained.

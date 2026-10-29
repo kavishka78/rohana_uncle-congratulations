@@ -6,6 +6,7 @@ import { RotateCw, Hand, Expand } from 'lucide-react';
 import Car from './Car';
 import { greeting, modelUrl } from './config';
 import { replaceGrille } from './grille';
+import { repairDoorBlockers } from './doorFix';
 
 class SceneBoundary extends Component<{ children: ReactNode; fallback: ReactNode }, { failed: boolean }> {
   state = { failed: false };
@@ -43,6 +44,7 @@ function LoadedCar({ onLoaded }: { onLoaded: () => void }) {
       object.material = Array.isArray(object.material) ? object.material.map(recolor) : recolor(object.material);
     });
     replaceGrille(copy, pearlPaint);
+    repairDoorBlockers(copy);
     return copy;
   }, [originalScene]);
   useEffect(onLoaded, []);
