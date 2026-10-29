@@ -24,6 +24,8 @@ function LoadedCar({ onLoaded }: { onLoaded: () => void }) {
     copy.traverse(object => {
       if (!(object instanceof Mesh)) return;
       const recolor = (material: MeshStandardMaterial) => {
+        // Front grille slats only; keep the emblem, grille backing and lower intake intact.
+        if (object.name === 'Object001_chrome_0' && bodyPaint) return bodyPaint.clone();
         if (material.name !== 'carpaint_second') return material;
         const whiteRoof = material.clone();
         if (bodyPaint) whiteRoof.color.copy(bodyPaint.color);
