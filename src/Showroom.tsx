@@ -5,6 +5,7 @@ import { Box3, Vector3, Mesh, MeshPhysicalMaterial, MeshStandardMaterial } from 
 import { RotateCw, Hand, Expand } from 'lucide-react';
 import Car from './Car';
 import { greeting, modelUrl } from './config';
+import { paintGrille } from './grille';
 
 class SceneBoundary extends Component<{ children: ReactNode; fallback: ReactNode }, { failed: boolean }> {
   state = { failed: false };
@@ -15,6 +16,7 @@ function LoadedCar({ onLoaded }: { onLoaded: () => void }) {
   const { scene: originalScene } = useGLTF(modelUrl!, false, true);
   const scene = useMemo(() => {
     const copy = originalScene.clone(true);
+    copy.updateMatrixWorld(true);
     const pearlPaint = new MeshPhysicalMaterial({
       name: 'Sunlight white pearl preview',
       color: greeting.carPaint,
@@ -27,10 +29,21 @@ function LoadedCar({ onLoaded }: { onLoaded: () => void }) {
     });
     copy.traverse(object => {
       if (!(object instanceof Mesh)) return;
+      // Only the small front RS emblem and its backing, not the Honda emblem.
+      if (['GN_PARTS_v02_VEZEL_RS_Parts_shell_28_Lightset_01_chrome_0',
+        'GN_PARTS_v02_VEZEL_RS_Parts_shell_36_Lightset_01_red_0',
+        'GN_PARTS_v02_VEZEL_RS_Parts_shell_78_Lightset_01_black_gloss_0'].includes(object.name)) {
+        object.visible = false;
+        return;
+      }
+      if (object.name === 'GN_PARTS_v02_VEZEL_RS_Parts_shell_40_Lightset_01_black_gloss_0') {
+        paintGrille(object, pearlPaint);
+        return;
+      }
       const recolor = (material: MeshStandardMaterial) => {
         // Upper grille only: keep the badge, dark recesses and lower intake intact.
         const upperGrille = object.name === 'Object001_chrome_0'
-          || object.name === 'GN_PARTS_v02_VEZEL_RS_Parts_shell_40_Lightset_01_black_gloss_0';
+          || object.name === 'GN_PARTS_v02_VEZEL_RS_Parts_shell_17_black_0';
         return upperGrille || material.name === 'carpaint' || material.name === 'carpaint_second'
           ? pearlPaint : material;
       };
