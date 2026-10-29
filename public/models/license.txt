@@ -1,0 +1,13 @@
+Model Information:
+* title:	Honda Vezel e:HEV RS (HR-V)
+* source:	https://sketchfab.com/3d-models/honda-vezel-ehev-rs-hr-v-bf835b5a5e6f4b79a134db5156992cf0
+* author:	Asadawut.Kaewma (https://sketchfab.com/Asadawut.Kaewma)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Honda Vezel e:HEV RS (HR-V)" (https://sketchfab.com/3d-models/honda-vezel-ehev-rs-hr-v-bf835b5a5e6f4b79a134db5156992cf0) by Asadawut.Kaewma (https://sketchfab.com/Asadawut.Kaewma) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+
+Modifications: Geometry simplified and Meshopt-compressed for web display. Model year not verified.

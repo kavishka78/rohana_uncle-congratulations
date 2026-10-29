@@ -8,3 +8,5 @@ playwright-report/
 .npm-cache/
 *.log
 *.tsbuildinfo
+.model-source/
+asset-sources/

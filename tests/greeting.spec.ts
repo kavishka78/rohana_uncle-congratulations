@@ -2,16 +2,21 @@ import { test, expect } from '@playwright/test';
 test('opens the greeting, displays personal fallback and replays', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
-  await page.goto('/');
+  await page.goto('/#top');
+  await expect(page).toHaveURL('http://127.0.0.1:5173/');
   await expect(page.getByRole('heading', { name: /a special surprise/i })).toBeVisible();
   await page.getByRole('button', { name: /open your surprise/i }).click();
   await expect(page.getByRole('heading', { name: /Congratulations/ })).toBeVisible();
-  await expect(page.getByText('Original crossover study')).toBeVisible();
-  await expect(page.locator('.portrait-name')).toHaveText('ROHANA');
-  await page.getByRole('button', { name: 'Explore the car' }).click();
+  await page.locator('.wordmark').click();
+  await expect(page).toHaveURL('http://127.0.0.1:5173/');
+  await expect(page.getByText('Preparing your showroom…', { exact: true })).toHaveCount(0, { timeout: 30000 });
+  await expect(page.getByText('Original crossover study')).toHaveCount(0);
+  const portrait = page.locator('.portrait img');
+  await expect(portrait).toBeVisible();
+  expect(await portrait.evaluate(img => (img as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  await page.getByRole('link', { name: 'YOUR NEXT ADVENTURE' }).click();
   await expect(page.locator('#showroom')).toBeInViewport();
-  const rotate = page.getByRole('button', { name: 'Rotate the model' });
-  if (await rotate.isEnabled()) { await rotate.click(); await expect(page.getByRole('button', { name: 'Pause rotation' })).toHaveAttribute('aria-pressed', 'true'); }
+  await expect(page).toHaveURL('http://127.0.0.1:5173/');
   expect(await page.evaluate(() => document.body.scrollWidth <= window.innerWidth)).toBe(true);
   await page.getByRole('button', { name: 'Replay the surprise' }).click();
   await expect(page.getByRole('button', { name: /open your surprise/i })).toBeFocused();
@@ -23,6 +28,5 @@ test('reduced motion and unavailable WebGL remain usable', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: /open your surprise/i }).click();
   await expect(page.getByText('Interactive 3D is unavailable')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Rotate the model' })).toBeDisabled();
   await expect(page.getByRole('heading', { name: /Made especially/ })).toBeVisible();
 });

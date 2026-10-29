@@ -1,0 +1,10 @@
+import { NodeIO } from '@gltf-transform/core';
+import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
+import { dedup, prune, weld, simplify, meshopt } from '@gltf-transform/functions';
+import { MeshoptEncoder, MeshoptSimplifier } from 'meshoptimizer';
+await Promise.all([MeshoptEncoder.ready, MeshoptSimplifier.ready]);
+const io = new NodeIO().registerExtensions(ALL_EXTENSIONS).registerDependencies({ 'meshopt.encoder': MeshoptEncoder });
+const document = await io.read('.model-source/scene.gltf');
+await document.transform(dedup(), weld(), simplify({ simplifier: MeshoptSimplifier, ratio: .3, error: .001 }), prune(), meshopt({ encoder: MeshoptEncoder, level: 'high' }));
+await io.write('public/models/vezel.glb', document);
+console.log('Optimized model written to public/models/vezel.glb');
