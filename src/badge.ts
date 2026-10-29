@@ -28,6 +28,28 @@ export function fitFrontBadge(root: Object3D, grille: Group, grilleFront: number
     geometry.computeBoundingSphere();
     badge.geometry = geometry;
   }
+  // Preserve the front silhouette; flatten only the silver layer's depth so it
+  // sits just ahead of the blue insert rather than projecting away from it.
+  const silver = badges.find(badge => badge.name === 'LOGO_FRONT_H_RS_chrome_0');
+  const blue = badges.find(badge => badge.name === 'Plane002_blue_0');
+  if (silver && blue) {
+    const silverBounds = new Box3().setFromObject(silver, true);
+    const blueBounds = new Box3().setFromObject(blue, true);
+    const depth = silverBounds.max.z - silverBounds.min.z;
+    if (depth > 0) {
+      const geometry = silver.geometry;
+      const originalNormals = geometry.getAttribute('normal')?.clone();
+      geometry.applyMatrix4(silver.matrixWorld);
+      geometry.translate(0, 0, -silverBounds.min.z);
+      geometry.scale(1, 1, .00028 / depth);
+      geometry.translate(0, 0, blueBounds.max.z + .00012);
+      geometry.applyMatrix4(silver.matrixWorld.clone().invert());
+      // Keep the existing front-facing silver highlights while changing depth only.
+      if (originalNormals) geometry.setAttribute('normal', originalNormals);
+      geometry.computeBoundingBox();
+      geometry.computeBoundingSphere();
+    }
+  }
   const halfW = width / 2, halfH = height / 2;
   const shape = new Shape();
   shape.moveTo(-halfW + radius, -halfH);
