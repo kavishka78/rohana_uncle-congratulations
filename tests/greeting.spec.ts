@@ -14,8 +14,8 @@ test('opens the greeting, displays personal fallback and replays', async ({ page
   const portrait = page.locator('.portrait img');
   await expect(portrait).toBeVisible();
   expect(await portrait.evaluate(img => (img as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
-  await page.getByRole('link', { name: 'YOUR NEXT ADVENTURE' }).click();
-  await expect(page.locator('#showroom')).toBeInViewport();
+  await page.getByRole('link', { name: 'Read your personal note' }).click();
+  await expect(page.locator('#personal-note')).toBeInViewport();
   await expect(page).toHaveURL('http://127.0.0.1:5173/');
   expect(await page.evaluate(() => document.body.scrollWidth <= window.innerWidth)).toBe(true);
   await page.getByRole('button', { name: 'Replay the surprise' }).click();
