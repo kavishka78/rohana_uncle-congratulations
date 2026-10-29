@@ -27,9 +27,11 @@ export function replaceGrille(root: Object3D, paint: Material) {
   const grille = new Group();
   grille.name = 'Custom_horizontal_body_color_grille';
   const inverseRoot = root.matrixWorld.clone().invert();
-  const badge = root.getObjectByName('LOGO_FRONT_H_RS_chrome_0');
-  const badgeCenter = badge ? new Box3().setFromObject(badge, true).getCenter(new Vector3()) : new Vector3(centerX, .519, 0);
-  const badgeOpening = fitFrontBadge(root, grille, surfaceZ(badgeCenter.x, badgeCenter.y), inverseRoot, black);
+  const slatThickness = height * .052;
+  const lowerBorder = bottom + height * (.085 + 3 * .112) + slatThickness / 2;
+  const upperBorder = bottom + height * (.085 + 7 * .112) - slatThickness / 2;
+  const badgeSlot = { centerY: (lowerBorder + upperBorder) / 2, height: upperBorder - lowerBorder - .003 };
+  const badgeOpening = fitFrontBadge(root, grille, surfaceZ(centerX, badgeSlot.centerY), inverseRoot, black, badgeSlot);
   function addSurface(name: string, vertices: number[], indices: number[], material: Material) {
     const geometry = new BufferGeometry();
     geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));

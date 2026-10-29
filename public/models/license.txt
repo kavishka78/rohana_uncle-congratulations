@@ -19,3 +19,5 @@ Display geometry modification: Original upper RS grille insert replaced by a cus
 Front-door repair: Restored the two original front-door skin meshes to remove simplification artifacts. Recessed the two intersecting door-seam blocker strips in the viewer; original handles and keyhole retained.
 
 Front emblem mounting: Repositioned the original Honda emblem closer to the custom grille and added a shallow rounded backing matching its outline.
+
+Emblem fit refinement: Thin, near-flush emblem fitted between continuous upper/lower slats; rounded backing confined to its outline.
